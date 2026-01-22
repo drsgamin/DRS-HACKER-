@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DRS HACKER • Premium Shop</title>
+
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,Segoe UI,sans-serif}
+
+body{
+  min-height:100vh;
+  background:#0b0f1a;
+  color:#fff;
+}
+
+#particles-js{
+  position:fixed;
+  inset:0;
+  z-index:-1;
+}
+
+.page{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  padding:20px;
+}
+
+.container{
+  width:100%;
+  max-width:560px;
+  background:rgba(255,255,255,.06);
+  border-radius:28px;
+  padding:22px;
+  box-shadow:
+    0 0 40px rgba(160,80,255,.35),
+    inset 0 0 40px rgba(255,255,255,.05);
+  backdrop-filter:blur(18px);
+}
+
+.header{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:18px;
+}
+.header img{
+  width:82px;
+  border-radius:18px;
+  box-shadow:0 0 20px rgba(160,80,255,.8);
+}
+.header h1{
+  font-size:1.4rem;
+  color:#b88cff;
+}
+.header p{
+  font-size:.8rem;
+  opacity:.85;
+}
+
+.title{
+  margin:16px 0 12px;
+  color:#66f7ff;
+}
+
+.shop{
+  display:grid;
+  gap:12px;
+}
+.item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px;
+  border-radius:20px;
+  background:linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,.02));
+  border:1px solid rgba(255,255,255,.1);
+}
+.price{color:#66f7ff;font-weight:600}
+
+.buy{
+  padding:8px 18px;
+  border-radius:16px;
+  border:none;
+  background:linear-gradient(135deg,#b88cff,#66f7ff);
+  color:#000;
+  font-weight:700;
+  cursor:pointer;
+}
+
+#payBox{
+  display:none;
+  margin-top:24px;
+  padding:20px;
+  border-radius:24px;
+  background:linear-gradient(135deg,rgba(184,140,255,.25),rgba(0,0,0,.55));
+}
+
+#payBox img{
+  width:240px;
+  display:block;
+  margin:16px auto;
+  border-radius:18px;
+  box-shadow:0 0 30px rgba(102,247,255,.7);
+}
+
+.info{font-size:.9rem;line-height:1.6}
+.code{color:#66f7ff;font-weight:700}
+
+.btn{
+  width:100%;
+  margin-top:10px;
+  padding:13px;
+  border-radius:18px;
+  border:none;
+  background:linear-gradient(135deg,#b88cff,#66f7ff);
+  color:#000;
+  font-weight:700;
+  cursor:pointer;
+}
+.btn.outline{
+  background:transparent;
+  color:#66f7ff;
+  border:2px solid #66f7ff;
+}
+
+footer{
+  margin-top:18px;
+  text-align:center;
+  font-size:.75rem;
+  opacity:.65;
+}
+</style>
+</head>
+
+<body>
+
+<div id="particles-js"></div>
+
+<div class="page">
+<div class="container">
+
+<div class="header">
+  <img src="images/your-logo.png">
+  <div>
+    <h1>DRS HACKER </h1>
+    <p>💎⚡ GUILD GLORY BOT AVAILABLE<br>@dhirajxdrs</p>
+  </div>
+</div>
+
+<div class="title">👑 GLORY SHOP</div>
+
+<div class="shop">
+  <div class="item"><h3>100K GLORY</h3><div><div class="price">₹300</div><button class="buy">BUY</button></div></div>
+  <div class="item"><h3>200K GLORY</h3><div><div class="price">₹550</div><button class="buy">BUY</button></div></div>
+  <div class="item"><h3>300K GLORY</h3><div><div class="price">₹700</div><button class="buy">BUY</button></div></div>
+  <div class="item"><h3>400K GLORY</h3><div><div class="price">₹900</div><button class="buy">BUY</button></div></div>
+  <div class="item"><h3>500K GLORY</h3><div><div class="price">₹1100</div><button class="buy">BUY</button></div></div>
+  <div class="item"><h3>1 TO 7 LEVEL</h3><div><div class="price">₹1500</div><button class="buy">BUY</button></div></div>
+</div>
+
+<div id="payBox">
+  <div class="info" id="orderText"></div>
+  <img src="images/your-qr.png">
+
+  <button class="btn" id="upiBtn">💳 PAY USING ANY UPI APP</button>
+  <button class="btn" onclick="copyPay()">📋 COPY PAYMENT DETAILS</button>
+  <button class="btn outline" id="tgBtn">📨 SEND DETAILS ON TELEGRAM</button>
+</div>
+
+<footer>©2026 DRS HACKER</footer>
+
+</div>
+</div>
+
+<script>
+particlesJS("particles-js",{
+  particles:{
+    number:{value:60},
+    color:{value:"#66f7ff"},
+    size:{value:3},
+    line_linked:{enable:true,color:"#b88cff",opacity:.4},
+    move:{speed:1.4}
+  }
+});
+
+const UPI="dhirajtg@fam";
+let locked=false,plan="",price="",orderId="",code="";
+
+document.querySelectorAll(".buy").forEach(btn=>{
+  btn.onclick=()=>{
+    if(locked){
+      document.getElementById("payBox").scrollIntoView({behavior:"smooth"});
+      return;
+    }
+
+    const item=btn.closest(".item");
+    plan=item.querySelector("h3").innerText;
+    price=item.querySelector(".price").innerText;
+
+    orderId="GX-"+Math.floor(100000+Math.random()*900000);
+    code="PAY-"+Math.random().toString(36).substring(2,8).toUpperCase();
+    locked=true;
+
+    document.getElementById("orderText").innerHTML=
+      `Order ID: <b>${orderId}</b><br>
+       Plan: <b>${plan}</b><br>
+       Amount: <b>${price}</b><br>
+       Code: <span class="code">${code}</span>`;
+
+    document.getElementById("upiBtn").onclick=()=>{
+      window.location.href=
+        `upi://pay?pa=${UPI}&pn=SurajX&am=${price.replace("₹","")}&cu=INR&tn=${code}`;
+    };
+
+    document.getElementById("tgBtn").onclick=()=>{
+      window.open(
+        `https://t.me/dhirajxdrs?text=PAYMENT%20DETAILS%0AORDER:${orderId}%0APLAN:${plan}%0APRICE:${price}%0ACODE:${code}`,
+        "_blank"
+      );
+    };
+
+    const box=document.getElementById("payBox");
+    box.style.display="block";
+    box.scrollIntoView({behavior:"smooth"});
+  };
+});
+
+function copyPay(){
+  navigator.clipboard.writeText(`UPI ID: ${UPI}\nCODE: ${code}`);
+  alert("Payment details copied");
+}
+</script>
+
+</body>
+</html>
